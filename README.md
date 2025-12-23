@@ -115,39 +115,3 @@ Submit a contact form with mortgage inquiry details.
   }
 }
 ```
-
-## 🎨 Design Features
-
-- **Responsive Design**: Fully responsive layout that works on mobile, tablet, and desktop
-- **Clean UI**: Minimal and professional design following modern UI principles
-- **Accessibility**: Proper form labels and semantic HTML
-- **Interactive Elements**: Hover states, transitions, and smooth interactions
-- **Custom Styling**: Custom range slider with smooth animations
-
-## 🤖 AI Integration Explanation
-
-On a production Neon Mortgage website, an AI-powered mortgage calculator would leverage:
-
-1. **Machine Learning Models**: Trained on historical loan data, user income patterns, credit behavior, and market interest rates
-2. **Dynamic Adjustments**: Automatically adjust eligibility criteria based on real-time market conditions
-3. **Predictive Analysis**: Predict approval probability and recommend optimal loan tenure
-4. **Personalization**: Provide personalized EMI suggestions based on user profile and behavior
-5. **Credit Scoring Integration**: Real-time credit scoring API integration
-6. **Smart Recommendations**: AI-driven recommendations for better financial decisions
-
-This would provide a much more intelligent system compared to the current static rule-based calculations.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
