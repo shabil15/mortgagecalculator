@@ -187,17 +187,13 @@ export default function MortgageCalculator() {
                   {(isNaN(emi) || !isFinite(emi) ? 0 : Math.floor(emi)).toLocaleString()}
                 </span>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 mb-3">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <p className="text-xs text-blue-50 leading-relaxed">
                   Based on a loan of <span className="font-bold text-white">₹{loanAmount.toLocaleString()}</span> at{" "}
                   <span className="font-bold text-white">{interestRate}%</span> interest for{" "}
                   <span className="font-bold text-white">{loanTenure} years</span>
                 </p>
               </div>
-              <button className="w-full bg-white text-blue-600 py-3 px-4 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg text-sm">
-                Get Amortization Schedule
-                <span className="text-xl">→</span>
-              </button>
             </div>
 
             {/* Total Interest Card */}
@@ -248,13 +244,6 @@ export default function MortgageCalculator() {
                 </p>
               </div>
             )}
-
-            {/* Disclaimer */}
-            <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
-              <p className="text-xs text-gray-600 leading-relaxed">
-                <span className="font-semibold text-gray-800">Disclaimer:</span> The calculated EMI is an estimate and may vary based on actual terms and conditions. Please consult with your financial advisor for accurate information.
-              </p>
-            </div>
           </div>
         </div>
       </div>
