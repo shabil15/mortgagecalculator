@@ -52,8 +52,8 @@ export function checkEligibility(emi: number, monthlyIncome: number) {
  * @param currency - Currency code
  * @returns Formatted currency string
  */
-export function formatCurrency(amount: number, currency: string = "AED"): string {
-  return new Intl.NumberFormat("en-AE", {
+export function formatCurrency(amount: number, currency: string = "INR"): string {
+  return new Intl.NumberFormat("en-IN", {
     style: "decimal",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,

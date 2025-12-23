@@ -1,18 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { calculateEMI, checkEligibility, formatCurrency } from "@/utils/mortgage";
+import { useState, useMemo } from "react";
+import { calculateEMI, checkEligibility } from "@/utils/mortgage";
 
 interface EligibilityResult {
   isEligible: boolean;
   message: string;
-  emiToIncomeRatio: string;
-}
-
-interface EMIResult {
-  emi: number;
-  totalInterest: number;
-  totalAmount: number;
+  emiToIncomeRatio: number;
 }
 
 export default function MortgageCalculator() {
@@ -21,26 +15,25 @@ export default function MortgageCalculator() {
   const [interestRate, setInterestRate] = useState<number>(0);
   const [loanTenure, setLoanTenure] = useState<number>(1);
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
-  
-  const [emi, setEmi] = useState<number>(0);
-  const [totalInterest, setTotalInterest] = useState<number>(0);
-  const [eligibility, setEligibility] = useState<EligibilityResult | null>(null);
 
-  useEffect(() => {
-    const loanAmount = propertyPrice - downPayment;
+  const loanAmount = propertyPrice - downPayment;
+  
+  const { emi, totalInterest } = useMemo(() => {
     const result = calculateEMI(loanAmount, interestRate, loanTenure);
-    const eligible = checkEligibility(result.emi, monthlyIncome);
-    
-    setEmi(isNaN(result.emi) || !isFinite(result.emi) ? 0 : result.emi);
-    setTotalInterest(isNaN(result.totalInterest) || !isFinite(result.totalInterest) ? 0 : result.totalInterest);
-    setEligibility(eligible);
-  }, [propertyPrice, downPayment, interestRate, loanTenure, monthlyIncome]);
+    return {
+      emi: isNaN(result.emi) || !isFinite(result.emi) ? 0 : result.emi,
+      totalInterest: isNaN(result.totalInterest) || !isFinite(result.totalInterest) ? 0 : result.totalInterest
+    };
+  }, [loanAmount, interestRate, loanTenure]);
+
+  const eligibility = useMemo(() => {
+    return checkEligibility(emi, monthlyIncome);
+  }, [emi, monthlyIncome]);
 
   const downPaymentPercentage = propertyPrice > 0 ? ((downPayment / propertyPrice) * 100).toFixed(0) : '0';
-  const loanAmount = propertyPrice - downPayment;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-6 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 py-6 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-6">
@@ -69,7 +62,7 @@ export default function MortgageCalculator() {
                     const val = e.target.value.replace(/,/g, '');
                     if (!isNaN(Number(val))) setPropertyPrice(Number(val) || 0);
                   }}
-                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-blue-600 outline-none pb-2 transition-colors duration-200 bg-transparent"
+                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-gray-900 outline-none pb-2 transition-colors duration-200 bg-transparent"
                 />
               </div>
 
@@ -89,7 +82,7 @@ export default function MortgageCalculator() {
                     const val = e.target.value.replace(/,/g, '');
                     if (!isNaN(Number(val))) setDownPayment(Number(val) || 0);
                   }}
-                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-blue-600 outline-none pb-2 transition-colors duration-200 bg-transparent"
+                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-gray-900 outline-none pb-2 transition-colors duration-200 bg-transparent"
                 />
               </div>
 
@@ -97,7 +90,7 @@ export default function MortgageCalculator() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Interest Rate</label>
-                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">%</span>
+                  <span className="text-xs font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">%</span>
                 </div>
                 <input
                   type="number"
@@ -105,7 +98,7 @@ export default function MortgageCalculator() {
                   step="0.1"
                   value={interestRate === 0 ? '' : interestRate}
                   onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                  className="w-full text-2xl md:text-3xl font-bold text-blue-600 border-b-2 border-gray-300 focus:border-blue-600 outline-none pb-2 transition-colors duration-200 bg-transparent"
+                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-gray-900 outline-none pb-2 transition-colors duration-200 bg-transparent"
                 />
                 <div className="mt-2">
                   <input
@@ -115,7 +108,7 @@ export default function MortgageCalculator() {
                     step="0.1"
                     value={interestRate}
                     onChange={(e) => setInterestRate(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>0%</span>
@@ -128,14 +121,14 @@ export default function MortgageCalculator() {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Loan Tenure</label>
-                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">Years</span>
+                  <span className="text-xs font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">Years</span>
                 </div>
                 <input
                   type="number"
                   placeholder="1"
                   value={loanTenure}
                   onChange={(e) => setLoanTenure(Number(e.target.value) || 1)}
-                  className="w-full text-2xl md:text-3xl font-bold text-blue-600 border-b-2 border-gray-300 focus:border-blue-600 outline-none pb-2 transition-colors duration-200 bg-transparent"
+                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-gray-900 outline-none pb-2 transition-colors duration-200 bg-transparent"
                 />
                 <div className="mt-2">
                   <input
@@ -145,7 +138,7 @@ export default function MortgageCalculator() {
                     step="1"
                     value={loanTenure}
                     onChange={(e) => setLoanTenure(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>1 year</span>
@@ -168,7 +161,7 @@ export default function MortgageCalculator() {
                     const val = e.target.value.replace(/,/g, '');
                     if (!isNaN(Number(val))) setMonthlyIncome(Number(val) || 0);
                   }}
-                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-blue-600 outline-none pb-2 transition-colors duration-200 bg-transparent"
+                  className="w-full text-2xl md:text-3xl font-bold text-gray-900 border-b-2 border-gray-300 focus:border-gray-900 outline-none pb-2 transition-colors duration-200 bg-transparent"
                 />
               </div>
             </div>
@@ -177,8 +170,8 @@ export default function MortgageCalculator() {
           {/* Right Column - Results */}
           <div className="space-y-3">
             {/* EMI Card */}
-            <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-5 shadow-xl text-white">
-              <p className="text-xs uppercase tracking-wider mb-1 text-blue-100 font-medium">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-5 shadow-xl text-white">
+              <p className="text-xs uppercase tracking-wider mb-1 text-gray-300 font-medium">
                 Monthly EMI
               </p>
               <div className="flex items-baseline gap-2 mb-3">
@@ -188,7 +181,7 @@ export default function MortgageCalculator() {
                 </span>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                <p className="text-xs text-blue-50 leading-relaxed">
+                <p className="text-xs text-gray-200 leading-relaxed">
                   Based on a loan of <span className="font-bold text-white">₹{loanAmount.toLocaleString()}</span> at{" "}
                   <span className="font-bold text-white">{interestRate}%</span> interest for{" "}
                   <span className="font-bold text-white">{loanTenure} years</span>
